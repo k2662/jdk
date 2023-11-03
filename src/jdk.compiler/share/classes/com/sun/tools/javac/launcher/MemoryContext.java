@@ -224,8 +224,8 @@ final class MemoryContext {
         var modulePathFinder = createModuleFinderFromModulePath();
         var modulePathModules = modulePathFinder.findAll().stream().map(ModuleReference::descriptor).map(ModuleDescriptor::name).toList();
         if (!modulePathModules.isEmpty()) {
-            var modulePathConfiguration = bootLayer.configuration().resolveAndBind(modulePathFinder, ModuleFinder.of(), Set.copyOf(modulePathModules));
-            var modulePathLayer = ModuleLayer.defineModulesWithOneLoader(modulePathConfiguration, List.of(bootLayer), parent).layer();
+            var modulePathConfiguration = bootLayer.configuration().resolveAndBind(ModuleFinder.of(), modulePathFinder, Set.copyOf(modulePathModules));
+            var modulePathLayer = bootLayer.defineModulesWithOneLoader(modulePathConfiguration, parent);
             parentLayer = modulePathLayer;
             parentLoader = modulePathLayer.findLoader(modulePathModules.getFirst());
         }
