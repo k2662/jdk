@@ -200,42 +200,35 @@ public final class SourceLauncher {
         Class<?> firstClass;
         String firstClassName = topLevelClassNames.getFirst();
         try {
-            firstClass = context.loadApplicationClass(parentLoader, firstClassName);
+            ClassLoader loader = context.newClassLoaderFor(parentLoader, firstClassName);
+            firstClass = Class.forName(firstClassName, false, loader);
         } catch (ClassNotFoundException e) {
             throw new Fault(Errors.CantFindClass(firstClassName));
         }
 
-        Method mainMethod = null;
+        Method mainMethod;
         try {
             mainMethod = MainMethodFinder.findMainMethod(firstClass);
         } catch (NoSuchMethodException e) {
-            // 2. If the first class doesn't have a main method, look for a top-level public class
+            // 2. If the first class doesn't have a main method, look for a class with a matching name
             var compilationUnitName = context.getProgramDescriptor().fileObject().getFile().getFileName().toString();
             assert compilationUnitName.endsWith(".java");
-            var expectedPublicName = compilationUnitName.substring(0, compilationUnitName.length() - 5);
-            for (var name : topLevelClassNames) {
-                Class<?> nextClass;
-                try {
-                    nextClass = Class.forName(name, true, firstClass.getClassLoader());
-                }  catch (ClassNotFoundException ignore) {
-                    throw new Fault(Errors.CantFindClass(name));
-                }
-                if (Modifier.isPublic(nextClass.getModifiers())) {
-                    // 3. If there's a top-level public class and doesn't match the name - fail
-                    if (!nextClass.getName().equals(expectedPublicName)) {
-                        throw new Fault(Errors.CantFindClass(expectedPublicName));
-                    }
-                    // 4. If the top-level public class has a main method - invoke it
-                    try {
-                        mainMethod = MainMethodFinder.findMainMethod(nextClass);
-                        break;
-                    } catch (NoSuchMethodException ignore) {
-                        // continue with next class
-                    }
-                }
+            var expectedName = compilationUnitName.substring(0, compilationUnitName.length() - 5);
+            var actualName = topLevelClassNames.stream()
+                    .filter(name -> name.equals(expectedName))
+                    .findFirst()
+                    .orElseThrow(() -> new Fault(Errors.CantFindClass(expectedName)));
+
+            Class<?> actualClass;
+            try {
+                actualClass = Class.forName(actualName, false, firstClass.getClassLoader());
+            }  catch (ClassNotFoundException ignore) {
+                throw new Fault(Errors.CantFindClass(actualName));
             }
-            if (mainMethod == null) {
-                throw new Fault(Errors.CantFindMainMethod(firstClassName));
+            try {
+                mainMethod = MainMethodFinder.findMainMethod(actualClass);
+            } catch (NoSuchMethodException ignore) {
+                throw new Fault(Errors.CantFindMainMethod(actualName));
             }
         }
 

@@ -194,20 +194,19 @@ final class MemoryContext {
     }
 
     /**
-     * Load main entry-point class.
+     * Create a new class load for the main entry-point class.
      *
      * @param parent the class loader to be used as the parent loader
      * @param mainClassName the fully-qualified name of the application class to load
-     * @return class object representing the desired class
+     * @return class loader object able to find and load the desired class
      * @throws ClassNotFoundException if the class cannot be located
      * @throws Fault if a modular application class is in the unnamed package
      */
-    Class<?> loadApplicationClass(ClassLoader parent, String mainClassName) throws ClassNotFoundException, Fault {
+    ClassLoader newClassLoaderFor(ClassLoader parent, String mainClassName) throws ClassNotFoundException, Fault {
         var moduleInfoBytes = inMemoryClasses.get("module-info");
         if (moduleInfoBytes == null) {
             // Trivial case: no compiled module descriptor available, no extra module layer required
-            var memoryClassLoader = new MemoryClassLoader(inMemoryClasses, parent, null, descriptor, this::compileJavaFileByName);
-            return Class.forName(mainClassName, true, memoryClassLoader);
+            return new MemoryClassLoader(inMemoryClasses, parent, null, descriptor, this::compileJavaFileByName);
         }
 
         // Ensure main class resides in a named package.
@@ -243,7 +242,7 @@ final class MemoryContext {
         var mainClassNamePackageName = mainClassName.substring(0, lastDotInMainClassName);
         memoryController.addOpens(module, mainClassNamePackageName, getClass().getModule());
 
-        return memoryLayer.findLoader(applicationModule.name()).loadClass(mainClassName);
+        return memoryLayer.findLoader(applicationModule.name());
     }
 
     private static ModuleFinder createModuleFinderFromModulePath() {
