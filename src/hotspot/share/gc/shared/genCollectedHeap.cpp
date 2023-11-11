@@ -21,7 +21,7 @@
  * questions.
  *
  */
- 
+
 #include "gc/shared/genCollectedHeap.hpp"
 #include "gc/serial/serialHeap.hpp"
 
