@@ -53,12 +53,17 @@
   nonstatic_field(SerialBlockOffsetSharedArray,      _vs,                    VirtualSpace)                  \
   nonstatic_field(SerialBlockOffsetSharedArray,      _offset_array,          u_char*)                       \
                                                                                                             \
-  nonstatic_field(TenuredSpace,                      _offsets,               SerialBlockOffsetTable)
+  nonstatic_field(TenuredSpace,                      _offsets,               SerialBlockOffsetTable)        \
+                                                                                                            \
+  nonstatic_field(SerialHeap,                        _young_gen,             DefNewGeneration*)             \
+  nonstatic_field(SerialHeap,                        _old_gen,               TenuredGeneration*)            \
+  nonstatic_field(SerialHeap,                        _young_gen_spec,        GenerationSpec*)               \
+  nonstatic_field(SerialHeap,                        _old_gen_spec,          GenerationSpec*)               \
 
 #define VM_TYPES_SERIALGC(declare_type,                                       \
                           declare_toplevel_type,                              \
                           declare_integer_type)                               \
-  declare_type(SerialHeap,                   GenCollectedHeap)                \
+  declare_type(SerialHeap,                   CollectedHeap)                   \
   declare_type(TenuredGeneration,            Generation)                      \
   declare_type(TenuredSpace,                 ContiguousSpace)                 \
                                                                               \

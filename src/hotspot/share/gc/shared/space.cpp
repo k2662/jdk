@@ -126,7 +126,7 @@ HeapWord* ContiguousSpace::forward(oop q, size_t size,
     cp->space->set_compaction_top(compact_top);
     cp->space = cp->space->next_compaction_space();
     if (cp->space == nullptr) {
-      cp->gen = GenCollectedHeap::heap()->young_gen();
+      cp->gen = GenCollectedHeap::young_gen();
       assert(cp->gen != nullptr, "compaction must succeed");
       cp->space = cp->gen->first_compaction_space();
       assert(cp->space != nullptr, "generation must have a first compaction space");

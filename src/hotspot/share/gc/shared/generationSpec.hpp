@@ -28,6 +28,8 @@
 #include "gc/serial/generation.hpp"
 #include "utilities/align.hpp"
 
+class CardTableRS;
+
 // The specification of a generation.  This class also encapsulates
 // some generation-specific behavior.  This is done here rather than as a
 // virtual function of Generation because these methods are needed in
