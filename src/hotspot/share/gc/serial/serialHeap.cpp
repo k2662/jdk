@@ -33,6 +33,7 @@
 #include "memory/universe.hpp"
 #include "runtime/mutexLocker.hpp"
 #include "services/memoryManager.hpp"
+#include "serialVMOperations.hpp"
 
 #include "classfile/classLoaderDataGraph.hpp"
 #include "classfile/stringTable.hpp"
