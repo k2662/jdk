@@ -22,6 +22,7 @@
  *
  */
 
+#include "precompiled.hpp"
 #include "gc/serial/serialVMOperations.hpp"
 #include "gc/shared/gcLocker.hpp"
 
