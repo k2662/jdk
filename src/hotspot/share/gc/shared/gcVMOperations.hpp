@@ -26,7 +26,6 @@
 #define SHARE_GC_SHARED_GCVMOPERATIONS_HPP
 
 #include "gc/shared/collectedHeap.hpp"
-// #include "gc/serial/serialHeap.hpp"
 #include "memory/metaspace.hpp"
 #include "prims/jvmtiExport.hpp"
 #include "runtime/handles.hpp"

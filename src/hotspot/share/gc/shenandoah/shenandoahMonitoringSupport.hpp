@@ -26,6 +26,7 @@
 #define SHARE_GC_SHENANDOAH_SHENANDOAHMONITORINGSUPPORT_HPP
 
 #include "memory/allocation.hpp"
+#include "gc/shared/collectorCounters.hpp"
 
 class GenerationCounters;
 class HSpaceCounters;
