@@ -26,6 +26,7 @@
 #define SHARE_GC_SHARED_GCVMOPERATIONS_HPP
 
 #include "gc/shared/collectedHeap.hpp"
+#include "gc/shared/collectorCounters.hpp"
 #include "memory/metaspace.hpp"
 #include "prims/jvmtiExport.hpp"
 #include "runtime/handles.hpp"
