@@ -91,11 +91,6 @@ SerialHeap* SerialHeap::heap() {
 }
 
 SerialHeap::SerialHeap() :
-#if 0
-    SerialHeap(Generation::DefNew,
-                     Generation::MarkSweepCompact,
-                     "Copy:MSC"),
-#endif
     CollectedHeap(),
     _young_gen(nullptr),
     _old_gen(nullptr),
